@@ -8,4 +8,4 @@ curl -sSL https://get.docker.com | sh
 usermod -aG docker ubuntu
 
 # run the thing
-docker run -t -p 5000:5000 vpsx/paoloserver:latest
+docker run -t -p 80:5000 vpsx/paoloserver:latest
