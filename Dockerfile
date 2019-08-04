@@ -15,6 +15,7 @@ WORKDIR /home/paolo
 RUN pip3 install flask
 ENV FLASK_APP=paolo.py
 ADD paolo.py .
+ADD templates/hello.html templates/hello.html
 
 # Shouldn't need this if you run with -p 5000:5000
 # EXPOSE 5000
