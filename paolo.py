@@ -3,6 +3,7 @@ from contextlib import contextmanager
 from flask import Flask
 from flask import render_template
 from flask import request
+from flask import json
 
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, Float
@@ -30,12 +31,12 @@ def session_scope():
 class Paolo(Base):
     __tablename__ = 'paolos'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, primary_key=True)
     verysecretsecret = Column(String)
     latitude = Column(Float)
     longitude = Column(Float)
     birthday = Column(Integer)
+    lastseen = Column(String)
 
 Base.metadata.create_all(engine)
 
@@ -59,6 +60,45 @@ def write_log():
     else:
         return "Only POST for now...\n"
 
+@app.route('/givelocation', methods=['POST'])
+def give_location():
+    # I THINK this could do with some codes MAYBE
+    if request.method != 'POST':
+        return "Only POST for now...\n"
+    if not request.is_json:
+        return "Plz give json...\n"
+    try:
+        name = request.json["Name"]
+        timestamp = request.json["Timestamp"]
+        latitude = request.json["Latitude"]
+        longitude = request.json["Longitude"]
+    except: # This is not even the MVP, okay?
+        return "U give bad json...\n"
+    with session_scope() as session:
+        person = session.query(Paolo).filter(Paolo.name==name).one_or_none()
+        if not person:
+            return "U not exist...\n"
+        person.latitude = latitude
+        person.longitude = longitude
+        person.lastseen = timestamp
+    return "OK, ...probably\n"
+
+@app.route('/getlocation', methods=['GET'])
+def get_location():
+    # codes
+    name = request.args.get('name', None)
+    if not name:
+        return "Plz give name\n"
+    with session_scope() as session:
+        person = session.query(Paolo).filter(Paolo.name==name).one_or_none()
+        if not person:
+            return "This person not exist\n"
+        return json.jsonify(
+            name=person.name,
+            lastseen=person.lastseen,
+            latitude=person.latitude,
+            longitude=person.longitude,
+        )
 
 
 def add_some_stuff():
