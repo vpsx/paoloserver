@@ -10,7 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # dialect+driver://username:password@host:port/database
-engine = create_engine('postgresql+psycopg2://aolop:notexposedongithub@db:5432/paolosdb', echo=False)
+engine = create_engine('postgresql+psycopg2://aolop@db:5432/paolosdb', echo=False)
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 
@@ -30,10 +30,8 @@ def session_scope():
 class Paolo(Base):
     __tablename__ = 'paolos'
 
-    # todo: Add unique constraint on name probably
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String, primary_key=True)
     verysecretsecret = Column(String)
     latitude = Column(Float)
     longitude = Column(Float)

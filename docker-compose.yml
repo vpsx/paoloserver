@@ -6,9 +6,9 @@ services:
     environment:
       POSTGRES_DB: paolosdb
       POSTGRES_USER: aolop
-      POSTGRES_PASSWORD: notexposedongithub
-    #ports:
-    #  - "8001:5432"
+      #POSTGRES_PASSWORD: notexposedongithub
+    ports:
+      - "8001:5432"
   paoloserver:
     image: paoloserver:posty
     ports:
