@@ -77,7 +77,14 @@ def give_location():
     with session_scope() as session:
         person = session.query(Paolo).filter(Paolo.name==name).one_or_none()
         if not person:
-            return "U not exist...\n"
+            newperson = Paolo(
+                name=name,
+                lastseen=timestamp,
+                latitude=latitude,
+                longitude=longitude,
+            )
+            session.add(newperson)
+            return "U not exist... I creat.\n"
         person.latitude = latitude
         person.longitude = longitude
         person.lastseen = timestamp
@@ -127,4 +134,3 @@ def add_some_stuff():
         session.add_all([flamingo, cove, tadpoles])
 
 add_some_stuff()
-print("Tada")
