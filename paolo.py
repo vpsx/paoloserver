@@ -133,4 +133,7 @@ def add_some_stuff():
     with session_scope() as session:
         session.add_all([flamingo, cove, tadpoles])
 
-add_some_stuff()
+try:
+    add_some_stuff()
+except:
+    print("Didn't add random stuff to db")
