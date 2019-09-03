@@ -126,8 +126,8 @@ def add_some_stuff():
 
     tadpoles = Paolo(
         name='tadpoles',
-        latitude=41.795363,
-        longitude=-87.578011,
+        latitude=41.795351,
+        longitude=-87.577861,
     )
 
     with session_scope() as session:
