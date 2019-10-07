@@ -1,0 +1,1 @@
+alias p='psql -h 0.0.0.0 -p 8001 -U aolop paolosdb'
