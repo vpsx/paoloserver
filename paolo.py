@@ -31,6 +31,7 @@ def session_scope():
         yield session
         session.commit()
     except:
+        logging.error("Rolling back transaction")
         session.rollback()
         raise
     finally:
@@ -79,8 +80,10 @@ def write_log():
 def give_location():
     # I THINK this could do with some codes MAYBE
     if request.method != 'POST':
+        logging.info("User attempted non-post method on give_location")
         return "Only POST for now...\n"
     if not request.is_json:
+        logging.info("User attempted non-json data on give_location")
         return "Plz give json...\n"
     try:
         name = request.json["Name"]
@@ -88,10 +91,12 @@ def give_location():
         latitude = request.json["Latitude"]
         longitude = request.json["Longitude"]
     except: # This is not even the MVP, okay?
+        logging.error("In give_location, couldn't parse json or something??")
         return "U give bad json...\n"
     with session_scope() as session:
         person = session.query(Paolo).filter(Paolo.name==name).one_or_none()
         if not person:
+            logging.debug("Didn't find person in give_location. Creating")
             newperson = Paolo(
                 name=name,
                 lastseen=timestamp,
@@ -100,6 +105,8 @@ def give_location():
             )
             session.add(newperson)
             return "U not exist... I creat.\n"
+        else:
+            logging.debug("Found person in give_location. Updating")
         person.latitude = latitude
         person.longitude = longitude
         person.lastseen = timestamp
