@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+import logging
 
 from flask import Flask
 from flask import render_template
@@ -14,6 +15,13 @@ from sqlalchemy.orm import sessionmaker
 engine = create_engine('postgresql+psycopg2://aolop@db:5432/paolosdb', echo=False)
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
+
+logging.basicConfig(
+    #filename='logs.txt',
+    level=logging.DEBUG,
+    format='[%(asctime)s] %(levelname)s: \n    %(message)s\n',
+    datefmt='%a %Y-%b-%d %H:%M:%S %Z',
+)
 
 
 @contextmanager
@@ -53,10 +61,17 @@ def paolo_is_here():
 def write_log():
     if request.method == 'POST':
         if request.is_json:
-            print(request.json)
+            logging.info(
+                "Log endpoint, json. Received: {json}"
+                .format(json=request.json)
+            )
+            return request.json
         else:
-            print(request.data)
-        return "What am I doing\n"
+            logging.info(
+                "Log endpoint, not json. Received: {data}"
+                .format(data=request.data)
+            )
+            return request.data
     else:
         return "Only POST for now...\n"
 
@@ -136,4 +151,4 @@ def add_some_stuff():
 try:
     add_some_stuff()
 except:
-    print("Didn't add random stuff to db")
+    logging.info("Didn't add random stuff to db")
