@@ -1,0 +1,17 @@
+# I belong in /etc/systemd/system as hellopaolo.service
+# chmod +x hellopaolo.js
+
+[Unit]
+Description=Hellopaolo service
+
+[Service]
+ExecStart=/home/ec2-user/.nvm/versions/node/v17.1.0/bin/node /home/ec2-user/paoloserver/hellopaolo.js > /home/ec2-user/hellologs.txt 2>&1
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+# sudo systemctl daemon-reload
+# sudo systemctl enable hellopaolo.service
+# sudo systemctl status hellopaolo.service [-l]
+# sudo systemctl start hellopaolo

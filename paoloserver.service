@@ -1,0 +1,17 @@
+# I belong in /etc/systemd/system as paoloserver.service
+# chmod +x app.js
+
+[Unit]
+Description=Paoloserver service
+
+[Service]
+ExecStart=/home/ec2-user/.nvm/versions/node/v17.1.0/bin/node /home/ec2-user/paoloserver/app.js > /home/ec2-user/applogs.txt 2>&1
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+# sudo systemctl daemon-reload
+# sudo systemctl enable paoloserver.service
+# sudo systemctl status paoloserver.service [-l]
+# sudo systemctl start paoloserver
