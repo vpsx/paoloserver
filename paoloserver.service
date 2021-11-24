@@ -1,5 +1,6 @@
 # I belong in /etc/systemd/system as paoloserver.service
 # chmod +x app.js
+# Follow logs: journalctl -fu paoloserver.service
 
 [Unit]
 Description=Paoloserver service
