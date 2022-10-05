@@ -1,6 +1,8 @@
 // Serve a silly "where is Paolo" page for fun and for tradition
 
+const fs = require('fs');
 const http = require('http');
+const https = require('https');
 
 // Not 127.0.0.1, unless you do mean accessible from localhost only
 const hostname = '0.0.0.0';
@@ -11,9 +13,15 @@ const hostname = '0.0.0.0';
 // run this before running the program the first time.
 // (And do it for 443 too!)
 // sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3000
-const port = 3000;
+const http_port = 3000;
+const https_port = 3001;
 
-const server = http.createServer((req, res) => {
+const options = {
+  //key: fs.readFileSync('key.pem'),
+  //cert: fs.readFileSync('cert.pem')
+};
+
+const app = (req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/html');
   res.end(`
@@ -33,8 +41,12 @@ const server = http.createServer((req, res) => {
 </body>
 </html>
 `);
-});
+};
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+
+http.createServer(app).listen(http_port, hostname, () => {
+  console.log(`HTTP server running at ${hostname}:${http_port}/`);
+});
+https.createServer(options, app).listen(https_port, hostname, () => {
+  console.log(`HTTPS server running at ${hostname}:${https_port}/`);
 });
